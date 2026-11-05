@@ -1,15 +1,54 @@
-# norio-nomura/action-swiftlint
+# GitHub Action for SwiftLint
 
-A tool to enforce Swift style and conventions
+This Action executes [SwiftLint](https://github.com/realm/SwiftLint) and generates annotations from SwiftLint Violations.
 
-Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at [https://github.com/norio-nomura/action-swiftlint](https://github.com/norio-nomura/action-swiftlint).
+## Usage
 
-## Versions
+An example workflow(`.github/workflows/swiftlint.yml`) to executing SwiftLint follows:
 
-| Version | Tag | Upstream commit | Hardening report |
-|---------|-----|-----------------|------------------|
-| 3.2.0 | [`3.2.0`](https://github.com/chainguard-actions/norio-nomura-action-swiftlint/tree/3.2.0) | [`c5cb516`](https://github.com/norio-nomura/action-swiftlint/commit/c5cb516b32920e934b459952b671de2da5e04379) | [`HARDENING.md`](https://github.com/chainguard-actions/norio-nomura-action-swiftlint/blob/3.2.0/HARDENING.md) |
-| 3.2.1 | [`3.2.1`](https://github.com/chainguard-actions/norio-nomura-action-swiftlint/tree/3.2.1) | [`9f4dcd7`](https://github.com/norio-nomura/action-swiftlint/commit/9f4dcd7fd46b4e75d7935cf2f4df406d5cae3684) | [`HARDENING.md`](https://github.com/chainguard-actions/norio-nomura-action-swiftlint/blob/3.2.1/HARDENING.md) |
+```yaml
+name: SwiftLint
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/swiftlint.yml'
+      - '.swiftlint.yml'
+      - '**/*.swift'
+
+jobs:
+  SwiftLint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: GitHub Action for SwiftLint
+        uses: norio-nomura/action-swiftlint@3.1.0
+      - name: GitHub Action for SwiftLint with --strict
+        uses: norio-nomura/action-swiftlint@3.1.0
+        with:
+          args: --strict
+      - name: GitHub Action for SwiftLint (Only files changed in the PR)
+        uses: norio-nomura/action-swiftlint@3.1.0
+        env:
+          DIFF_BASE: ${{ github.base_ref }}
+```
+
+## Secrets
+
+- ~~Specifying `GITHUB_TOKEN` to `secrets` is required to using [Check Run APIs](https://developer.github.com/v3/checks/runs/) for generating annotations from SwiftLint Violations.~~
+- Since 3.0.0, `GITHUB_TOKEN` is no longer needed.
+
+## Example
+[Here](https://github.com/norio-nomura/test-action-swiftlint/pull/1/files) is an example that actually works.
+![screenshot](screenshot.png)
+
+## Author
+
+Norio Nomura
+
+## License
+
+[MIT](LICENSE)
 
 ## Privacy
 
